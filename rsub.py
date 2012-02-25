@@ -88,7 +88,13 @@ class Session:
             sublime.error_message('Failed to write to temp file! Error: %s' % str(e))
 
         # Open it within sublime
-        view = sublime.active_window().open_file(self.temp_path)
+        window = sublime.active_window()
+
+		# No active window? We'd best create a new one, then. But how?!
+        if window is None:
+            return
+
+        view = window.open_file(self.temp_path)
         SESSIONS[view.id()] = self
 
     def close_connection(self, view):
